@@ -277,19 +277,17 @@ public class MineSweeperWithFlags1 {
 
         final int mineCount = (int) (MINE_MULTIPLIER * gridSize);
         final Random random = new Random();
-        Set<Integer> positions = new HashSet<>(gridSize * gridSize);
-        for (int row = 0; row < gridSize; row++) {
-            for (int col = 0; col < gridSize; col++) {
-                positions.add(row * gridSize + col);
-            }
+        java.util.List<Integer> positions = new ArrayList<>(gridSize * gridSize);
+        // Fill with all positions...
+        for (int i = 0; i < gridSize * gridSize; i++) {
+            positions.add(i);
         }
-
         for (int index = 0; index < mineCount; index++) {
-            int choice = random.nextInt(positions.size());
-            int row = choice / gridSize;
-            int col = choice % gridSize;
+            int randomIndex = random.nextInt(positions.size());
+            int position = positions.remove(randomIndex); // ✅ O(1) amortized
+            int row = position / gridSize;
+            int col = position % gridSize;
             cells[row][col].setValue(MINE);
-            positions.remove(choice);
         }
 
         for (int row = 0; row < gridSize; row++) {
